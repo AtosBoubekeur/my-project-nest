@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Intervention } from 'src/interventions/entities/intervention.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -6,14 +13,21 @@ export class User {
   id: number;
 
   @Column()
-  firstName: string;
+  firstname: string;
 
   @Column()
-  lastName: string;
+  lastname: string;
 
   @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
+
+  @OneToOne(() => Intervention, (intervention) => intervention.user, {
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn()
+  intervention: Intervention | null;
 }
