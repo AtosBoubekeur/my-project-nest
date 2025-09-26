@@ -29,6 +29,14 @@ export class UsersService {
     return user;
   }
 
+  async findOneByEmail(email: string) {
+    const user = await this.usersRepository.findOneBy({ email });
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOneById(id);
     Object.assign(user, updateUserDto);
@@ -38,6 +46,8 @@ export class UsersService {
   async remove(id: number) {
     const user = await this.findOneById(id);
     await this.usersRepository.remove(user);
-    return { message: `User with ID ${id} has been removed` };
+    return {
+      message: `User with ID ${id} has been removed`,
+    };
   }
 }
